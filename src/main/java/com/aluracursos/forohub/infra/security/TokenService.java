@@ -33,4 +33,20 @@ public class TokenService {
     private Instant expirationDate() {
         return LocalDateTime.now().plusHours(3).toInstant(ZoneOffset.of("-03:00"));
     }
+
+    public String getSubject(String token) {
+        if (token == null) {
+            throw new RuntimeException("Token is null");
+        }
+        try {
+            var algorithm = Algorithm.HMAC256(apiSecret);
+            return JWT.require(algorithm)
+                    .withIssuer("API Forohub")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (Exception exception) {
+            throw new RuntimeException("Invalid token", exception);
+        }
+    }
 }
