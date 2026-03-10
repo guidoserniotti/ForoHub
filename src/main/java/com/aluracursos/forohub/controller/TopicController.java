@@ -1,11 +1,12 @@
 package com.aluracursos.forohub.controller;
 
+import com.aluracursos.forohub.domain.topic.*;
 import jakarta.validation.Valid;
-import com.aluracursos.forohub.domain.topic.DataRegisterTopic;
-import com.aluracursos.forohub.domain.topic.Status;
-import com.aluracursos.forohub.domain.topic.Topic;
-import com.aluracursos.forohub.domain.topic.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -29,5 +30,23 @@ public class TopicController {
         repository.save(new Topic(data));
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<DataListTopic>> list(@PageableDefault(size = 10, sort = "creationDate", direction = Sort.Direction.ASC) Pageable pagination) {
+        var page = repository.findAll(pagination).map(DataListTopic::new);
+        return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity detail(@PathVariable Long id) {
+        var topicOptional = repository.findById(id);
+
+        if (topicOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var topic = topicOptional.get();
+        return ResponseEntity.ok(new DataListTopic(topic));
     }
 }
