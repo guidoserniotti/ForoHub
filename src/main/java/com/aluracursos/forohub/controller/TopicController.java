@@ -26,9 +26,8 @@ public class TopicController {
             return ResponseEntity.badRequest().body("Topico con el mismo titulo y mensaje ya existe.");
         }
 
-        var topic = new Topic(null, data.title(), data.message(), null, Status.OPEN, data.author(), data.course());
-        repository.save(topic);
+        repository.save(new Topic(data));
 
-        return ResponseEntity.ok(topic);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,6 +1,7 @@
 package com.aluracursos.forohub.domain.topic;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,4 +31,13 @@ public class Topic {
 
     private String author;
     private String course;
+
+    public Topic(@Valid DataRegisterTopic data) {
+        this.id = null;
+        this.title = data.title();
+        this.message = data.message();
+        this.author = data.author();
+        this.course = data.course();
+        this.status = Status.OPEN;
+    }
 }
