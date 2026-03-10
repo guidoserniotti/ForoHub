@@ -64,4 +64,17 @@ public class TopicController {
 
         return ResponseEntity.ok(new DataListTopic(topic));
     }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity delete(@PathVariable Long id) {
+        var topicOptional = repository.findById(id);
+
+        if (topicOptional.isPresent()) {
+            repository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.notFound().build();
+    }
 }
