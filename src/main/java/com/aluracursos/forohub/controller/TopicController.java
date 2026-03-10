@@ -49,4 +49,19 @@ public class TopicController {
         var topic = topicOptional.get();
         return ResponseEntity.ok(new DataListTopic(topic));
     }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity update(@PathVariable Long id, @RequestBody @Valid DataUpdateTopic data) {
+        var topicOptional = repository.findById(id);
+
+        if (topicOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var topic = topicOptional.get();
+        topic.updateData(data);
+
+        return ResponseEntity.ok(new DataListTopic(topic));
+    }
 }

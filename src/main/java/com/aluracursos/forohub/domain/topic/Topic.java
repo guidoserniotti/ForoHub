@@ -40,4 +40,13 @@ public class Topic {
         this.course = data.course();
         this.status = Status.OPEN;
     }
+
+    public void updateData(DataUpdateTopic data) {
+        if (data.title() != null) {
+            this.title = data.title();
+        }
+        if (data.message() != null) {
+            this.message = data.message();
+        }
+    }
 }
